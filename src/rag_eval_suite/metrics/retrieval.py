@@ -51,6 +51,7 @@ def hit_rate(retrieved_context: List[str], ground_truth_context: List[str]) -> b
         >>> hit_rate(retrieved, ground_truth)
         True  # Because "doc2" appears in both lists
     """
+    
     # Convert to sets for efficient intersection checking
     # This is O(n + m) for conversion, then O(min(n,m)) for isdisjoint check
     retrieved_set: Set[str] = set(retrieved_context)

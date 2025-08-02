@@ -1,0 +1,9 @@
+[
+    {
+        "question": "What types of events has the Principality Stadium hosted besides rugby and football matches?",
+        "ground_truth_context": [
+            "The Millennium Stadium, known since 2016 as the Principality Stadium, is the national stadium of Wales. Located in Cardiff, it is the home of the Wales national rugby union team and has also staged games of the Wales national football team.\n\nInitially built to host the 1999 Rugby World Cup, it has gone on to host many other large-scale events, such as the Tsunami Relief Cardiff concert, the Super Special Stage of Wales Rally Great Britain and numerous music concerts. It also hosted six FA Cup finals and several other high-profile football fixtures while Wembley Stadium was being redeveloped.\n\nThe stadium is owned by the Welsh Rugby Union (WRU). It features a fully retractable roof, only the second stadium of its type in Europe, and was the first stadium in the UK to have this feature. The natural grass turf was replaced with a hybrid pitch in 2014."
+        ],
+        "ground_truth_answer": "The Principality Stadium has also staged concerts, including the Tsunami Relief Cardiff concert, as well as the Super Special Stage of Wales Rally Great Britain, and it hosted six FA Cup finals while Wembley Stadium was being redeveloped."
+    }
+]

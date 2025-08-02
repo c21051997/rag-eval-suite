@@ -25,3 +25,6 @@ dist/
 # Environment files (never commit secrets!)
 .env
 *.env
+
+# Log files
+*.log
