@@ -1,0 +1,27 @@
+# --- Python ---
+# Virtual Environment folder
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build and distribution artifacts
+build/
+dist/
+*.egg-info/
+
+# --- IDEs / Editors ---
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# --- macOS ---
+.DS_Store
+
+# --- Other ---
+# Environment files (never commit secrets!)
+.env
+*.env

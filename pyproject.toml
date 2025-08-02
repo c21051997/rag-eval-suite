@@ -1,0 +1,38 @@
+# Project configuration, dependencies, and metadata for packaging with tools like pip.
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rag-eval-suite"
+version = "0.1.0"
+authors = [
+    { name = "Your Name", email = "your.email@example.com" },
+]
+description = "A comprehensive suite for evaluating RAG pipelines."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+# These are the core dependencies your library needs to run.
+# A user will get these when they 'pip install' your package.
+dependencies = [
+    "pydantic>=2.0",
+    "litellm>=1.0",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+# These are dependencies only needed for development and testing.
+# A user won't get these by default, but you can install them.
+dev = [
+    "pytest",
+    "openai", # Keeping openai here as you might use it specifically for testing
+    "anthropic", # Or any other client you want to test with
+]

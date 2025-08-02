@@ -1,0 +1,1 @@
+# Contains functions for evaluating the performance of the generation component (e.g., Faithfulness, Relevance).
