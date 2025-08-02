@@ -1,38 +1,48 @@
-# An example script to run the ASYNCHRONOUS evaluation pipeline.
+# An example script demonstrating how to use the new RAGEvaluator class.
 
 import asyncio
+from rag_eval_suite import RAGEvaluator # <-- See how clean this import is!
 from rag_eval_suite.data_models import TestCase, RAGResult
-from rag_eval_suite.pipeline import aevaluate_test_case # <-- Import the NEW async version
 from rich.console import Console
 from rich.table import Table
 
-# --- Using a local model with Ollama, so no API key needed ---
-
-class MockRAG:
-    # ... (same MockRAGIncomplete class as before) ...
+# --- Mock RAG System ---
+class MockRAGIncomplete:
     def query(self, question: str) -> RAGResult:
-        retrieved_context = ["The stadium features a fully retractable roof..."]
+        retrieved_context = [
+            "The stadium features a fully retractable roof, only the second stadium of its type in Europe, and was the first stadium in the UK to have this feature. The natural grass turf was replaced with a hybrid pitch in 2014."
+        ]
         final_answer = "The stadium has a fully retractable roof."
         return RAGResult(retrieved_context=retrieved_context, final_answer=final_answer)
 
 async def main():
     """Main async function to run the evaluation."""
+    
+    # 1. Instantiate the evaluator, configuring it once.
+    evaluator = RAGEvaluator(judge_model="ollama/llama3")
+
+    # 2. Define our Test Case
     test_case = TestCase(
         question="What are the notable features of the stadium's pitch and roof?",
-        ground_truth_context=["The stadium features a fully retractable roof..."],
+        ground_truth_context=[
+            "The stadium features a fully retractable roof..." # Truncated for brevity
+        ],
         ground_truth_answer="The stadium has a fully retractable roof and a hybrid pitch."
     )
-    
-    rag_system = MockRAG()
+
+    # 3. Get the result from our RAG system
+    rag_system = MockRAGIncomplete()
     rag_result = rag_system.query(test_case.question)
 
-    print("Running full ASYNC evaluation pipeline...")
-    evaluation_result = await aevaluate_test_case(test_case, rag_result)
-    print("Pipeline complete! ✅")
+    # 4. Run the evaluation using the evaluator object's async method
+    print("Running evaluation with the RAGEvaluator class...")
+    evaluation_result = await evaluator.aevaluate(test_case, rag_result)
+    print("Evaluation complete! ✅")
 
-    # 4. Display the comprehensive report
+    # 5. Display the report
     console = Console()
-    table = Table(title="🏆 RAG Evaluation Report (Testing for Completeness) 🏆")
+    table = Table(title="🏆 Final RAG Evaluation Report 🏆")
+    
     table.add_column("Category", style="cyan", no_wrap=True)
     table.add_column("Metric", style="green")
     table.add_column("Score", style="magenta")
@@ -48,6 +58,7 @@ async def main():
     table.add_row("Generation", "Answer Completeness", f"{scores['answer_completeness'].get('score', 0.0):.2f}", scores['answer_completeness'].get('justification', 'N/A'))
 
     console.print(table)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
