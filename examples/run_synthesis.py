@@ -1,7 +1,7 @@
 # An example script for running the test case synthesiser.
 
 import json
-from rag_eval_suite.synthesiser import synthesise_test_cases
+from ragscope.synthesiser import synthesise_test_cases
 
 # 1. Read the source document
 with open("my_document.txt", "r") as f:

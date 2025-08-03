@@ -11,16 +11,16 @@ These models form the backbone of the evaluation pipeline, ensuring data
 consistency and providing a clear contract for how data flows through the system.
 """
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Dict, Any, Optional
 
 
-class TestCase(BaseModel):
+class EvaluationCase(BaseModel):
     """
-    Represents a single test case for evaluating a RAG pipeline.
+    Represents a single evaluation case for evaluating a RAG pipeline.
     
     This is the "ground truth" data that we use to evaluate how well
-    a RAG system performs. Each test case contains:
+    a RAG system performs. Each evaluation case contains:
     1. A question that users might ask
     2. The correct context chunks that contain the answer
     3. The ideal answer we expect the system to generate
@@ -38,7 +38,7 @@ class TestCase(BaseModel):
     ground_truth_context: List[str] = Field(
         description="A list of the exact text chunks that contain the correct answer. "
                    "These represent what the retrieval system should ideally find.",
-        min_items=1  # Ensure we have at least one ground truth chunk
+        min_length=1  # Ensure we have at least one ground truth chunk
     )
     ground_truth_answer: str = Field(
         description="The ideal, factually correct answer to the question. "
@@ -46,7 +46,7 @@ class TestCase(BaseModel):
         min_length=1  # Ensure we don't have empty answers
     )
 
-    @validator('ground_truth_context')
+    @field_validator('ground_truth_context')
     def validate_context_not_empty(cls, v):
         """Ensure no empty strings in the ground truth context list."""
         if any(not chunk.strip() for chunk in v):
@@ -79,7 +79,7 @@ class RAGResult(BaseModel):
 
 class EvaluationResult(BaseModel):
     """
-    Represents the complete evaluation results for a single TestCase.
+    Represents the complete evaluation results for a single EvaluationCase.
     
     This is the final output of the evaluation pipeline, containing:
     1. The original test case (ground truth)
@@ -91,8 +91,8 @@ class EvaluationResult(BaseModel):
     - Generate reports and visualizations
     - Debug specific test cases that performed poorly
     """
-    test_case: TestCase = Field(
-        description="The original test case containing ground truth data"
+    test_case: EvaluationCase = Field(
+        description="The original evaluation case containing ground truth data"
     )
     rag_result: RAGResult = Field(
         description="The actual output produced by the RAG system"

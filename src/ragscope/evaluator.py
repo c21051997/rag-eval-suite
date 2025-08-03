@@ -26,7 +26,7 @@ import time
 from typing import List, Dict, Any, Optional, Tuple
 
 from litellm import acompletion
-from .data_models import TestCase, RAGResult, EvaluationResult
+from .data_models import EvaluationCase, RAGResult, EvaluationResult
 from .metrics.retrieval import hit_rate, mrr
 from . import prompts
 
@@ -121,7 +121,7 @@ class RAGEvaluator:
         logger.info(f"  Max Concurrent Calls: {self.max_concurrent_calls}")
         logger.info(f"  Timeout: {self.timeout_seconds}s")
 
-    def _validate_inputs(self, test_case: TestCase, rag_result: RAGResult) -> None:
+    def _validate_inputs(self, test_case: EvaluationCase, rag_result: RAGResult) -> None:
         """
         Validate inputs before evaluation to ensure meaningful results.
         
@@ -216,7 +216,7 @@ class RAGEvaluator:
                 "justification": f"Error: Evaluation failed - {str(e)}"
             }
 
-    async def aevaluate(self, test_case: TestCase, rag_result: RAGResult) -> EvaluationResult:
+    async def aevaluate(self, test_case: EvaluationCase, rag_result: RAGResult) -> EvaluationResult:
         """
         Perform comprehensive asynchronous evaluation of a RAG system result.
         
@@ -232,7 +232,7 @@ class RAGEvaluator:
         - Timeout protection prevents hanging on slow API calls
         
         Args:
-            test_case: TestCase containing question and ground truth data
+            test_case: EvaluationCase containing question and ground truth data
             rag_result: RAGResult containing the system's actual output
             
         Returns:
@@ -243,7 +243,7 @@ class RAGEvaluator:
             
         Example:
             >>> evaluator = RAGEvaluator()
-            >>> test_case = TestCase(question="What is AI?", ...)
+            >>> test_case = EvaluationCase(question="What is AI?", ...)
             >>> rag_result = RAGResult(retrieved_context=[...], final_answer="...")
             >>> result = await evaluator.aevaluate(test_case, rag_result)
             >>> print(f"Relevance: {result.scores['relevance']['score']}")
@@ -345,7 +345,7 @@ class RAGEvaluator:
         )
 
     async def evaluate_batch(self, 
-                           test_cases: List[TestCase], 
+                           test_cases: List[EvaluationCase], 
                            rag_results: List[RAGResult],
                            show_progress: bool = True) -> List[EvaluationResult]:
         """
@@ -374,7 +374,7 @@ class RAGEvaluator:
         # Create semaphore to limit concurrent evaluations
         semaphore = asyncio.Semaphore(self.max_concurrent_calls)
         
-        async def evaluate_with_semaphore(test_case: TestCase, rag_result: RAGResult) -> EvaluationResult:
+        async def evaluate_with_semaphore(test_case: EvaluationCase, rag_result: RAGResult) -> EvaluationResult:
             async with semaphore:
                 return await self.aevaluate(test_case, rag_result)
         

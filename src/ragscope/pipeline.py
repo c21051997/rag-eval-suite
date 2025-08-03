@@ -1,16 +1,16 @@
 # Contains the main pipeline functions to run the end-to-end evaluation workflow.
 
 import asyncio
-from .data_models import TestCase, RAGResult, EvaluationResult
+from .data_models import EvaluationCase, RAGResult, EvaluationResult
 from .metrics.retrieval import hit_rate, mrr
 from .metrics.generation import (
     score_faithfulness, score_relevance, score_context_relevance, score_completeness,
     ascore_faithfulness, ascore_relevance, ascore_context_relevance, ascore_completeness
 )
 
-def evaluate_test_case(test_case: TestCase, rag_result: RAGResult) -> EvaluationResult:
+def evaluate_test_case(test_case: EvaluationCase, rag_result: RAGResult) -> EvaluationResult:
     """
-    Runs a full evaluation on a single TestCase and its corresponding RAGResult synchronously.
+    Runs a full evaluation on a single EvaluationCase and its corresponding RAGResult synchronously.
     """
     # --- Retrieval Metrics ---
     retrieval_hit = hit_rate(rag_result.retrieved_context, test_case.ground_truth_context)
@@ -32,9 +32,9 @@ def evaluate_test_case(test_case: TestCase, rag_result: RAGResult) -> Evaluation
     return EvaluationResult(test_case=test_case, rag_result=rag_result, scores=all_scores)
 
 
-async def aevaluate_test_case(test_case: TestCase, rag_result: RAGResult) -> EvaluationResult:
+async def aevaluate_test_case(test_case: EvaluationCase, rag_result: RAGResult) -> EvaluationResult:
     """
-    Runs a full evaluation on a single TestCase and its corresponding RAGResult asynchronously.
+    Runs a full evaluation on a single EvaluationCase and its corresponding RAGResult asynchronously.
     """
     # Retrieval metrics are fast, no need for async
     retrieval_hit = hit_rate(rag_result.retrieved_context, test_case.ground_truth_context)

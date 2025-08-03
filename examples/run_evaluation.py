@@ -1,8 +1,8 @@
 # An example script demonstrating how to use the new RAGEvaluator class.
 
 import asyncio
-from rag_eval_suite import RAGEvaluator # <-- See how clean this import is!
-from rag_eval_suite.data_models import TestCase, RAGResult
+from ragscope import RAGEvaluator
+from ragscope.data_models import EvaluationCase, RAGResult
 from rich.console import Console
 from rich.table import Table
 
@@ -22,7 +22,7 @@ async def main():
     evaluator = RAGEvaluator(judge_model="ollama/llama3")
 
     # 2. Define our Test Case
-    test_case = TestCase(
+    test_case = EvaluationCase(
         question="What are the notable features of the stadium's pitch and roof?",
         ground_truth_context=[
             "The stadium features a fully retractable roof..." # Truncated for brevity

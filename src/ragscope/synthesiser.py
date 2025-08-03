@@ -25,7 +25,7 @@ How It Works:
 1. Document chunking: Break large documents into focused segments
 2. LLM generation: Use prompts to create realistic Q&A pairs
 3. Quality control: Validate and structure the generated content
-4. Test case creation: Package into standardized TestCase objects
+4. Test case creation: Package into standardized EvaluationCase objects
 
 This approach ensures your RAG system is evaluated on realistic, diverse scenarios
 that reflect actual user queries against your specific content domain.
@@ -36,7 +36,7 @@ import logging
 import re
 from typing import List, Dict, Any, Optional, Tuple
 from litellm import completion
-from .data_models import TestCase
+from .data_models import EvaluationCase
 
 
 # Configure logging for synthesis process tracking
@@ -242,19 +242,19 @@ def _generate_qa_pair(chunk: str, model: str) -> Optional[Tuple[str, str]]:
 def synthesise_test_cases(document_text: str, 
                          model: str = DEFAULT_SYNTHESIS_MODEL,
                          max_test_cases: Optional[int] = None,
-                         verbose: bool = True) -> List[TestCase]:
+                         verbose: bool = True) -> List[EvaluationCase]:
     """
     Generate a comprehensive set of test cases from a document using LLM synthesis.
     
     This is the main function that orchestrates the entire test case generation
-    process. It takes raw document text and produces a set of structured TestCase
+    process. It takes raw document text and produces a set of structured EvaluationCase
     objects that can be used to evaluate RAG systems.
     
     The synthesis process:
     1. Validates and preprocesses the input document
     2. Intelligently chunks the document into manageable segments  
     3. Generates realistic Q&A pairs for each chunk using LLM
-    4. Creates properly structured TestCase objects with ground truth
+    4. Creates properly structured EvaluationCase objects with ground truth
     5. Filters and validates the results for quality
     
     Why this approach works:
@@ -271,7 +271,7 @@ def synthesise_test_cases(document_text: str,
         verbose: Whether to print progress information
         
     Returns:
-        List of TestCase objects ready for RAG evaluation
+        List of EvaluationCase objects ready for RAG evaluation
         
     Raises:
         ValueError: If document_text is invalid for synthesis
@@ -308,7 +308,7 @@ def synthesise_test_cases(document_text: str,
             print(f"⚡ Limited to {max_test_cases} chunks due to max_test_cases setting")
     
     # Step 2: Generate test cases from each chunk
-    test_cases: List[TestCase] = []
+    test_cases: List[EvaluationCase] = []
     successful_generations = 0
     
     for i, chunk in enumerate(chunks, 1):
@@ -326,8 +326,8 @@ def synthesise_test_cases(document_text: str,
         question, answer = qa_result
         
         try:
-            # Create a properly structured TestCase object
-            test_case = TestCase(
+            # Create a properly structured EvaluationCase object
+            test_case = EvaluationCase(
                 question=question,
                 ground_truth_answer=answer,
                 ground_truth_context=[chunk]  # The source chunk is our ground truth context
@@ -339,7 +339,7 @@ def synthesise_test_cases(document_text: str,
                 print("✅ Success")
                 
         except Exception as e:
-            logger.error(f"Failed to create TestCase from generated Q&A: {e}")
+            logger.error(f"Failed to create EvaluationCase from generated Q&A: {e}")
             if verbose:
                 print("❌ Validation failed")
             continue

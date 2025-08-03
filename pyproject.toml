@@ -5,10 +5,10 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "rag-eval-suite"
+name = "ragscope"
 version = "0.1.0"
 authors = [
-    { name = "Your Name", email = "your.email@example.com" },
+    { name = "Harri Davies", email = "harridavies03@gmail.com" },
 ]
 description = "A comprehensive suite for evaluating RAG pipelines."
 readme = "README.md"
@@ -33,6 +33,19 @@ dependencies = [
 # A user won't get these by default, but you can install them.
 dev = [
     "pytest",
+    "pytest-asyncio",
+    "pytest-mock", 
+    "numpy",
     "openai", # Keeping openai here as you might use it specifically for testing
     "anthropic", # Or any other client you want to test with
 ]
+
+# Add this section to link to your GitHub repository
+[project.urls]
+Homepage = "https://github.com/c21051997/rag-eval-suite"
+"Bug Tracker" = "https://github.com/c21051997/rag-eval-suite/issues"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+python_classes = "Test"
