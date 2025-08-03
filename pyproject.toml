@@ -14,10 +14,15 @@ description = "A comprehensive suite for evaluating RAG pipelines."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.8"
+keywords = ["rag", "llm", "evaluation", "testing", "nlp"]
 classifiers = [
+    "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Testing",
 ]
 
 # These are the core dependencies your library needs to run.
@@ -26,6 +31,7 @@ dependencies = [
     "pydantic>=2.0",
     "litellm>=1.0",
     "rich>=13.0",
+    "tokenizers==0.15.2",
 ]
 
 [project.optional-dependencies]
@@ -49,3 +55,4 @@ Homepage = "https://github.com/c21051997/rag-eval-suite"
 pythonpath = ["src"]
 testpaths = ["tests"]
 python_classes = "Test"
+asyncio_mode = "auto"
